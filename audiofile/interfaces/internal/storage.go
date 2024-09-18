@@ -13,3 +13,4 @@ type Storage interface {
 }
 
 
+// used this interface to define the methods that the storage package must implement

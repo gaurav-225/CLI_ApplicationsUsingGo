@@ -8,7 +8,7 @@ import (
 type Audio struct {
 	Id string `json:"Id"`
 	Path string `json:"Path"`
-	Metadata string `json:"Metadata"`
+	Metadata Metadata `json:"Metadata"`
 	Status string `json:"Status"`
 	Error []string `json:"Error"`
 }
