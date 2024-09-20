@@ -9,17 +9,20 @@ import (
 	"path/filepath"
 
 	"github.com/google/uuid"
-	
 )
 
 type FlatFile struct {
 	Name string
 }
 
+// PushToMongoDB implements interfaces.Storage.
+func (f FlatFile) PushToMongoDB(audio *models.Audio) error {
+	panic("unimplemented")
+}
+
 // 1. Listing audio metadata in storage
 // 2. Searching audio metadata in storage
 // 3. Deleting audio from storage
-
 
 func (f FlatFile) Delete(id string) error {
 	fmt.Println("Deleting")
@@ -35,9 +38,6 @@ func (f FlatFile) GetByID(id string) (*models.Audio, error) {
 
 	mettadataFilePath := filepath.Join(dirname, "audiofile", id, "metadata.json")
 
-
-
-
 	file, err := os.ReadFile(mettadataFilePath)
 
 	if err != nil {
@@ -47,7 +47,7 @@ func (f FlatFile) GetByID(id string) (*models.Audio, error) {
 	data := models.Audio{}
 
 	err = json.Unmarshal([]byte(file), &data)
-	
+
 	return &data, err
 }
 
@@ -56,15 +56,15 @@ func (f FlatFile) List() ([]*models.Audio, error) {
 
 	if err != nil {
 		return nil, err
-	}	
+	}
 
 	metadataDirPath := filepath.Join(dirname, "audiofile")
 
 	dirs, err := os.ReadDir(metadataDirPath)
 
 	if err != nil {
-		return nil, err	
-		
+		return nil, err
+
 	}
 
 	audioFiles := []*models.Audio{}
@@ -72,7 +72,7 @@ func (f FlatFile) List() ([]*models.Audio, error) {
 	for _, dir1 := range dirs {
 		if dir1.IsDir() {
 			name, err := f.GetByID(dir1.Name())
-			if err != nil {	
+			if err != nil {
 				return nil, err
 			}
 			audioFiles = append(audioFiles, name)
@@ -86,9 +86,9 @@ func (f FlatFile) List() ([]*models.Audio, error) {
 func (f FlatFile) SaveMetadata(audio *models.Audio) error {
 	dirname, err := os.UserHomeDir()
 
-	if err != nil {	
+	if err != nil {
 		return err
-	}	
+	}
 
 	audioDirPath := filepath.Join(dirname, "audiofile", audio.Id)
 
@@ -96,8 +96,8 @@ func (f FlatFile) SaveMetadata(audio *models.Audio) error {
 
 	file, err := os.Create(metadataFilePath)
 
-	if err != nil {	
-		return err	
+	if err != nil {
+		return err
 	}
 
 	defer file.Close()
@@ -105,15 +105,15 @@ func (f FlatFile) SaveMetadata(audio *models.Audio) error {
 	data, err := audio.JSON()
 
 	if err != nil {
-		
+
 		fmt.Println("Error in JSON", err)
 		return err
 	}
 
 	_, err = io.WriteString(file, data)
 
-	if err != nil {	
-		return err	
+	if err != nil {
+		return err
 	}
 
 	// Sync commits the current contents of the file to stable storage
@@ -127,7 +127,7 @@ func (f FlatFile) Upload(bytes []byte, filename string) (string, string, error) 
 
 	dirname, err := os.UserHomeDir()
 
-	if err != nil {	
+	if err != nil {
 		return id.String(), "", err
 	}
 
@@ -137,7 +137,7 @@ func (f FlatFile) Upload(bytes []byte, filename string) (string, string, error) 
 		return id.String(), "", err
 	}
 
-	// dirname/audiofile/id/filename 
+	// dirname/audiofile/id/filename
 	audioFilePath := filepath.Join(audioDirPath, filename)
 
 	err = os.WriteFile(audioFilePath, bytes, 0664)
@@ -148,7 +148,4 @@ func (f FlatFile) Upload(bytes []byte, filename string) (string, string, error) 
 
 	return id.String(), audioFilePath, nil
 
-
-
 }
-

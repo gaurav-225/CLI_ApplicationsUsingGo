@@ -33,8 +33,8 @@ go get github.com/joho/godotenv
 // https://www.assemblyai.com/docs/getting-started/transcribe-an-audio-file #helpful docs
 func Extract(m *models.Audio) error {
 
-	err := godotenv.Load("../../.env")	
-
+	err := godotenv.Load(".env")	
+	
 	if err != nil {
 		fmt.Println("Error loading .env file", err)
 		return nil
@@ -42,9 +42,10 @@ func Extract(m *models.Audio) error {
 
 	// get the API key from the environment variable
 	apiKey := os.Getenv("ASSEMBLY_API_KEY")
-
+	// fmt.Println("My api key---------------",apiKey)
 	// load the audio file
 
+	fmt.Println("Sending the audio file to AssemblyAI for transcription")
 	data, err := os.Open(m.Path)
 
 	if err != nil {
@@ -64,6 +65,7 @@ func Extract(m *models.Audio) error {
    
     transcript, err := client.Transcripts.TranscribeFromReader(ctx, data, params)
 
+	fmt.Println("DOes this work")
 	if err != nil {
         fmt.Println("Something bad happened:", err)
         return err

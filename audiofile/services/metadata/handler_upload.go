@@ -103,7 +103,12 @@ func (m *MetadataService) uploadHandler(res http.ResponseWriter, req *http.Reque
 		}
 
 		audio.Error = errors
-		audio.Status = "Completed"
+		audio.Status = "Complete"
+		err = m.Storage.SaveMetadata(audio)
+		if err != nil {
+			fmt.Println("error saving metadata: ", err)
+			errors = append(errors, err.Error())
+		}
 
 		if len(errors) > 0 {
 			fmt.Println("errors occurred extracting metadata: ")
@@ -112,6 +117,15 @@ func (m *MetadataService) uploadHandler(res http.ResponseWriter, req *http.Reque
 			}
 		} else {
 			fmt.Println("successfully extracted and saved audio metadata: ", audio)
+
+			err = m.Storage.PushToMongoDB(audio)
+			if err != nil {
+				fmt.Println("Error pushing audio to MongoDB Atlas, saved locally:", err)
+				res.WriteHeader(http.StatusInternalServerError)
+				return
+			}
+
+			fmt.Println("pushing audio metadata to MongoDB Atlas", err)
 		}
 
 

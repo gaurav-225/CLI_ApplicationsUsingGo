@@ -10,6 +10,7 @@ type Storage interface {
 	List() ([]*models.Audio, error)
 	GetByID(id string) (*models.Audio, error)
 	Delete(id string) error
+	PushToMongoDB(audio *models.Audio) error
 }
 
 
