@@ -16,9 +16,7 @@ type FlatFile struct {
 }
 
 // PushToMongoDB implements interfaces.Storage.
-func (f FlatFile) PushToMongoDB(audio *models.Audio) error {
-	panic("unimplemented")
-}
+
 
 // 1. Listing audio metadata in storage
 // 2. Searching audio metadata in storage

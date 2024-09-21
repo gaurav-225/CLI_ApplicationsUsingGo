@@ -79,6 +79,7 @@ func (m *MetadataService) uploadHandler(res http.ResponseWriter, req *http.Reque
 		// Extract the tags from the audio file
 
 		err := tags.Extract(audio)
+		fmt.Println("Extracting Tags I had send the data to the function")
 
 		if err != nil {
 			errors = append(errors, err.Error())
@@ -96,7 +97,7 @@ func (m *MetadataService) uploadHandler(res http.ResponseWriter, req *http.Reque
 		// extract the transcript from the audio file
 
 		err = transcript.Extract(audio)
-
+		fmt.Println("Extracting Transcript I had send the data to the function")
 		if err != nil {
 			errors = append(errors, err.Error())
 			fmt.Println("Error Extracting Transcript", err)

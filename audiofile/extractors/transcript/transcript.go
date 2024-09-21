@@ -61,11 +61,11 @@ func Extract(m *models.Audio) error {
         SpeakerLabels: aai.Bool(true),
     }
 
-	// You can use a local file:
-   
+
     transcript, err := client.Transcripts.TranscribeFromReader(ctx, data, params)
 
-	fmt.Println("DOes this work")
+
+
 	if err != nil {
         fmt.Println("Something bad happened:", err)
         return err
