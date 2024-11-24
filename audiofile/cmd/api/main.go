@@ -11,7 +11,7 @@ func main() {
 
 	var port int
 
-	flag.IntVar(&port, "port", 8080, "Port to run the server on")
+	flag.IntVar(&port, "port", 8000, "Port to run the server on")
 	flag.Parse()
 
 	fmt.Println("Starting server on port", port)
